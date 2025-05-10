@@ -4,7 +4,9 @@
 #include "bird.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 // Sets default values
 Abird::Abird()
@@ -51,10 +53,24 @@ void Abird::BeginPlay()
 	
 }
 
+//THE OLD WAY!!! WE CAN IGNORE THIS
 void Abird::moveForward(float value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Value %f"), value);
 }
+
+//function that sets our value to something  and checks to see if it is true, and if it is, we log to screen.  value is a FInputActionValue so it can be a booleaan or 2d/3d vector.
+//we assign it to a boolean and then have a conditional statement to check if it is true
+void Abird::move(const FInputActionValue& Value)
+{
+	const bool currentValue = Value.Get<bool>();
+
+	if (currentValue) {
+		UE_LOG(LogTemp, Warning, TEXT("IA_move triggered!!!!"))
+	}
+}
+
+
 
 // Called every frame
 void Abird::Tick(float DeltaTime)
@@ -63,11 +79,18 @@ void Abird::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
+// Called to bind functionality to input 
 void Abird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(FName("moveForward"), this, &Abird::moveForward);
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(moveAction, ETriggerEvent::Triggered, this, &Abird::move);
+	}
+
+
+	//THIS WAS THE OLD WAY TO BIND!! DO NOT NEED TO DO THIS!
+	//PlayerInputComponent->BindAxis(FName("moveForward"), this, &Abird::moveForward);
 }
 

@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputActionValue.h"
 #include "bird.generated.h"
+
+
+
 
 
 //FORWARD DECLARE
@@ -12,6 +16,7 @@ class UCapsuleComponent;
 class USkeletalMeshComponent;
 class UInputMappingContext;
 class UInputAction;
+
 
 UCLASS()
 class TESTPROJECT_API Abird : public APawn
@@ -32,16 +37,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//callback function for moveing forward 
+	//callback function for moveing forward. THIS IS FOR THE OLD WAY OF CONTROLS _ YYOU CAN IGNORE THIS
 	void moveForward(float value);
 
-	//make a variable for an Input Action
+
+	
+
+	//make variable for mapping context  so you can use it in BP
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "INPUT")
+	UInputMappingContext* foxMappingContext;
+
+	//make a varaible  for the Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "INPUT")
 	UInputAction* moveAction;
 
-	//make variable for mapping context
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "INPUT")
-	UInputMappingContext* foxMappingContext;
+	//function that we will link  to the Input Action variable  "move action" we made above. 
+	void move(const FInputActionValue& Value);
+
+
 
 private:
 	UPROPERTY(VisibleAnywhere)
