@@ -63,10 +63,15 @@ void Abird::moveForward(float value)
 //we assign it to a boolean and then have a conditional statement to check if it is true
 void Abird::move(const FInputActionValue& Value)
 {
-	const bool currentValue = Value.Get<bool>();
+	const float directionValue = Value.Get<float>();
 
-	if (currentValue) {
+	if (directionValue) {
 		UE_LOG(LogTemp, Warning, TEXT("IA_move triggered!!!!"))
+	}
+
+	if (Controller && (directionValue != 0.f)) {
+		FVector  forward = GetActorForwardVector();
+		AddMovementInput(forward, directionValue);
 	}
 }
 
