@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "InputActionValue.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "bird.generated.h"
 
 
@@ -16,6 +17,8 @@ class UCapsuleComponent;
 class USkeletalMeshComponent;
 class UInputMappingContext;
 class UInputAction;
+class USpringArmComponent;
+class UCameraComponent;
 
 
 UCLASS()
@@ -51,8 +54,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "INPUT")
 	UInputAction* moveAction;
 
-	//function that we will link  to the Input Action variable  "move action" we made above. 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "INPUT")
+	UInputAction* lookAction;
+
+	//function that we will link  to the Input Action variable  "move action" we made above. That moves forward and back 
 	void move(const FInputActionValue& Value);
+
+	void look(const FInputActionValue& Value);
 
 
 
@@ -63,6 +71,13 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* skeleMesh;
 
-	
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* booms;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* viewCamera;
+
+
+
 
 };
