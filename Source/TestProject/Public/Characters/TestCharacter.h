@@ -89,4 +89,6 @@ public:
 	//this is a setter function. All this does is set our pointer overlappingItem to the item we put in the arguemnt.
 	FORCEINLINE void setOverlappingItem(AitemClass* item) { overlappingItem = item; }
 
+	//getter function for ENUM so we can use it in BP
+	FORCEINLINE EcharacterState getCharacterState() const { return characterState; }
 };
