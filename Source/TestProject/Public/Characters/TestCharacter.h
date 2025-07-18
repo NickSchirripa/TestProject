@@ -19,6 +19,7 @@ class UGroomComponent;
 
 //forward declare other stuff
 class AitemClass;
+class UAnimMontage;
 
 
 
@@ -77,6 +78,8 @@ private:
 
 	EcharacterState characterState = EcharacterState::ECS_unequiped;
 
+
+	/*COMPONENTS*/
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* booms;
 
@@ -90,6 +93,14 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AitemClass* overlappingItem;
+
+	/**
+	*
+	MONTAGE
+	*
+	**/
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* attackMontage;
 
 public:
 	//this is a setter function. All this does is set our pointer overlappingItem to the item we put in the arguemnt.

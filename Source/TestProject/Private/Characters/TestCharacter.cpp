@@ -17,6 +17,8 @@
 #include "items/itemClass.h"
 #include "items/weapons/weaponClass.h"
 
+#include "Animation/AnimMontage.h"
+
 
 // Sets default values
 ATestCharacter::ATestCharacter()
@@ -121,6 +123,34 @@ void ATestCharacter::fKeyPressed()
 
 void ATestCharacter::attackFunction()
 {
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && attackMontage)
+	{
+		animInstance->Montage_Play(attackMontage);
+
+		FName sectionName = FName();
+		int32 selection = FMath::RandRange(0, 2);
+
+		switch (selection)
+		{
+		case 0 :
+			sectionName = FName("attack1");
+				break;
+
+		case 1:
+			sectionName = FName("attack2");
+			break;
+
+		case 2:
+			sectionName = FName("attack3");
+			break;
+
+		default:
+			break;
+
+		}
+		animInstance->Montage_JumpToSection(sectionName, attackMontage);
+	}
 }
 
 
