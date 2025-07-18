@@ -60,11 +60,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	UInputAction* pickupAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	UInputAction* attack;
+
+
 	void move(const FInputActionValue& value);
 
 	void look(const FInputActionValue& Value);
 
 	void fKeyPressed();
+
+	void attackFunction();
 
 
 private:

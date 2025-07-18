@@ -119,6 +119,10 @@ void ATestCharacter::fKeyPressed()
 	}
 }
 
+void ATestCharacter::attackFunction()
+{
+}
+
 
 
 
@@ -143,7 +147,7 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &ATestCharacter::look);
 		EnhancedInputComponent->BindAction(jumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(pickupAction, ETriggerEvent::Triggered, this, &ATestCharacter::fKeyPressed);
-
+		EnhancedInputComponent->BindAction(attack, ETriggerEvent::Triggered, this, &ATestCharacter::attackFunction);
 
 		
 	}
