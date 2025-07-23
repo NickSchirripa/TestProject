@@ -87,6 +87,10 @@ void ATestCharacter::move(const FInputActionValue& value)
 	const FRotator YawRotation(0.f, controlRotation.Yaw, 0.f);
 	//getting a vector that points in  the way the camera is moved, by using the RoationMatrix, from the Rotators we got above. Then having the vector on the X Axis
 	const FVector direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	//Stop Moving if attacking
+	if (actionState == EactionState::EAS_attacking) return;
+	
 	//moving forward(which is the FVector X we got above) in the direction of the vector we got from the RotationMatrix, by the amount of the Input Action(which is 1 or -1, depending on the Input Action)
 	AddMovementInput(direction, movementVector.Y);
 
@@ -121,6 +125,7 @@ void ATestCharacter::fKeyPressed()
 	}
 }
 
+//attack animation function for when LMB is hit
 void ATestCharacter::attackFunction()
 {
 	if (CanAttack()) {
@@ -130,6 +135,7 @@ void ATestCharacter::attackFunction()
 	
 }
 
+//function to make attack animations not work if character is already attacking or does not have a weapon
 bool ATestCharacter::CanAttack()
 {
 	return actionState == EactionState::EAS_unoccupied && characterState != EcharacterState::ECS_unequiped;

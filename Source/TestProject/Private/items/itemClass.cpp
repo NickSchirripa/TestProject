@@ -69,7 +69,10 @@ void AitemClass::Tick(float DeltaTime)
 	float deltaZ = amplitude * FMath::Sin(runningTime * timeConstant);
 
 	//add a  world offset function to move the actor with the wave we made
+	if (ItemState == EItemState::EIS_Hovering) {
 	AddActorWorldOffset(FVector(0.f, 0.f, deltaZ));
+	}
+
 
 }
 

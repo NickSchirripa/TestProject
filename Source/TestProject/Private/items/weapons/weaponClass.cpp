@@ -11,6 +11,7 @@ void AweaponClass::equip(USceneComponent* inParent, FName inSocketName)
 {
 	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
 	staticMesh->AttachToComponent(inParent, TransformRules, inSocketName);
+	ItemState = EItemState::EIS_Equip;
 }
 
 void AweaponClass::onSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

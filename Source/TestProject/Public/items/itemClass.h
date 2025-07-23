@@ -8,6 +8,12 @@
 
 class USphereComponent;
 
+enum class EItemState: uint8 
+{
+	EIS_Hovering,
+	EIS_Equip
+};
+
 UCLASS()
 class TESTPROJECT_API AitemClass : public AActor
 {
@@ -32,10 +38,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* staticMesh;
 
+	//ItemState Enum
+	EItemState ItemState = EItemState::EIS_Hovering;
+
 private:
-
-
-
 
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* sphere;
