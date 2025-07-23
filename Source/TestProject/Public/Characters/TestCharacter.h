@@ -65,6 +65,11 @@ protected:
 	UInputAction* attack;
 
 
+	/**
+	* Callback Input Functions
+	**/
+
+
 	void move(const FInputActionValue& value);
 
 	void look(const FInputActionValue& Value);
@@ -73,10 +78,28 @@ protected:
 
 	void attackFunction();
 
+	/***
+	* Play Montage Functions
+	***/
+	void playAttackMontage();
+
+	//Notify Function
+	UFUNCTION(BlueprintCallable)
+	void attackAnimationEnd();
+
+	//Bool Function that returns conditional
+	bool CanAttack();
+
 
 private:
 
+	/**
+	Enums
+	*/
 	EcharacterState characterState = EcharacterState::ECS_unequiped;
+
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	EactionState actionState = EactionState::EAS_unoccupied;
 
 
 	/*COMPONENTS*/
@@ -102,10 +125,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Montages")
 	UAnimMontage* attackMontage;
 
+
+
+
 public:
 	//this is a setter function. All this does is set our pointer overlappingItem to the item we put in the arguemnt.
 	FORCEINLINE void setOverlappingItem(AitemClass* item) { overlappingItem = item; }
 
 	//getter function for ENUM so we can use it in BP
 	FORCEINLINE EcharacterState getCharacterState() const { return characterState; }
+
 };

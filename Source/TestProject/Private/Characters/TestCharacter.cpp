@@ -123,19 +123,34 @@ void ATestCharacter::fKeyPressed()
 
 void ATestCharacter::attackFunction()
 {
+	if (CanAttack()) {
+		playAttackMontage();
+		actionState = EactionState::EAS_attacking;
+	}
+	
+}
+
+bool ATestCharacter::CanAttack()
+{
+	return actionState == EactionState::EAS_unoccupied && characterState != EcharacterState::ECS_unequiped;
+}
+
+
+void ATestCharacter::playAttackMontage()
+{
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
 	if (animInstance && attackMontage)
 	{
 		animInstance->Montage_Play(attackMontage);
 
 		FName sectionName = FName();
-		int32 selection = FMath::RandRange(0, 2);
+		const int32 selection = FMath::RandRange(0, 2);
 
 		switch (selection)
 		{
-		case 0 :
+		case 0:
 			sectionName = FName("attack1");
-				break;
+			break;
 
 		case 1:
 			sectionName = FName("attack2");
@@ -152,6 +167,13 @@ void ATestCharacter::attackFunction()
 		animInstance->Montage_JumpToSection(sectionName, attackMontage);
 	}
 }
+
+void ATestCharacter::attackAnimationEnd()
+{
+	actionState = EactionState::EAS_unoccupied;
+}
+
+
 
 
 
