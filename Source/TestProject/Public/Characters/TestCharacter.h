@@ -20,6 +20,7 @@ class UGroomComponent;
 //forward declare other stuff
 class AitemClass;
 class UAnimMontage;
+class AweaponClass;
 
 
 
@@ -82,14 +83,29 @@ protected:
 	* Play Montage Functions
 	***/
 	void playAttackMontage();
+	void playEquipMontage(FName SectionName);
 
 	//Notify Function
 	UFUNCTION(BlueprintCallable)
 	void attackAnimationEnd();
 
-	//Bool Function that returns conditional
-	bool CanAttack();
+	//Bool Functions that returns conditional
 
+	bool CanAttack();
+	//this puts weapon away
+	bool CanDisarm();
+	//takes weapon out
+	bool CanArm();
+
+	/*Weapon Functions*/
+
+	//puts weapon away
+	UFUNCTION(BlueprintCallable)
+	void Disarm();
+
+	//equips weapon
+	UFUNCTION(BlueprintCallable)
+	void Arm();
 
 private:
 
@@ -114,8 +130,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	UGroomComponent* eyebrows;
 
+
+	/*Other Classes*/
 	UPROPERTY(VisibleInstanceOnly)
 	AitemClass* overlappingItem;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	AweaponClass* EquippedWeapon;
 
 	/**
 	*
@@ -125,6 +146,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Montages")
 	UAnimMontage* attackMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* equipMontage;
 
 
 

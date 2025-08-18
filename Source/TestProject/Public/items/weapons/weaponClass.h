@@ -16,6 +16,8 @@ class TESTPROJECT_API AweaponClass : public AitemClass
 public:
 	void equip(USceneComponent* inParent,FName inSocketName);
 
+	void AttachMeshToSocket(USceneComponent* inParent, const FName& inSocketName);
+
 protected:
 
 	//override functions

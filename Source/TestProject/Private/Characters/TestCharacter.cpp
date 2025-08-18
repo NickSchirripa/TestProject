@@ -88,7 +88,7 @@ void ATestCharacter::move(const FInputActionValue& value)
 	//getting a vector that points in  the way the camera is moved, by using the RoationMatrix, from the Rotators we got above. Then having the vector on the X Axis
 	const FVector direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-	//Stop Moving if attacking
+	//Stop Moving if attacking. If character is in the Enum attacking state - the code below will not run
 	if (actionState == EactionState::EAS_attacking) return;
 	
 	//moving forward(which is the FVector X we got above) in the direction of the vector we got from the RotationMatrix, by the amount of the Input Action(which is 1 or -1, depending on the Input Action)
@@ -119,9 +119,27 @@ void ATestCharacter::look(const FInputActionValue& Value)
 void ATestCharacter::fKeyPressed()
 {
 	AweaponClass* overlappingWeapon = Cast<AweaponClass>(overlappingItem);
-	if (overlappingWeapon) {
+	//picks up weapon ig overlapping
+	if (overlappingWeapon) 
+	{
 		overlappingWeapon->equip(GetMesh(), FName("rightHandSocket"));
 		characterState = EcharacterState::ECS_equippedOneHandWeapon;
+		overlappingItem = nullptr;
+		EquippedWeapon = overlappingWeapon;
+	
+	}
+	else{//disarms weapon and animation
+		if (CanDisarm()) 
+		{
+			playEquipMontage(FName("unequip"));
+			characterState = EcharacterState::ECS_unequiped;
+		}
+		//equips weapon and animation
+		else if (CanArm())
+		{
+			playEquipMontage(FName("equip"));
+			characterState = EcharacterState::ECS_equippedOneHandWeapon;
+		}
 	}
 }
 
@@ -141,7 +159,38 @@ bool ATestCharacter::CanAttack()
 	return actionState == EactionState::EAS_unoccupied && characterState != EcharacterState::ECS_unequiped;
 }
 
+//function that checks if if we should disarm when key hit
+bool ATestCharacter::CanDisarm()
+{
+	return actionState == EactionState::EAS_unoccupied && characterState != EcharacterState::ECS_unequiped;
+}
 
+//function that checks if we should equip, when F key hit
+bool ATestCharacter::CanArm()
+{
+	return actionState == EactionState::EAS_unoccupied &&  characterState == EcharacterState::ECS_unequiped && EquippedWeapon;
+}
+
+//function we exposed to BP that is attached to a notify and puts weapon on back
+void ATestCharacter::Disarm()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("spineSocket"));
+	}
+}
+
+//Function we exposed to BP and is attached to a Montage Notify that takes weapon off back
+void ATestCharacter::Arm()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("spineSocket"));
+	}
+}
+
+
+//function that chooses which attack animation to play
 void ATestCharacter::playAttackMontage()
 {
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
@@ -174,6 +223,20 @@ void ATestCharacter::playAttackMontage()
 	}
 }
 
+//function that chooses which equip or disarm animation to play
+void ATestCharacter::playEquipMontage(FName SectionName)
+{
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && equipMontage)
+	{
+		animInstance->Montage_Play(equipMontage);
+		animInstance->Montage_JumpToSection(SectionName, equipMontage);
+
+	}
+}
+
+
+
 void ATestCharacter::attackAnimationEnd()
 {
 	actionState = EactionState::EAS_unoccupied;
@@ -204,7 +267,7 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(movementAction, ETriggerEvent::Triggered, this, &ATestCharacter::move);
 		EnhancedInputComponent->BindAction(lookAction, ETriggerEvent::Triggered, this, &ATestCharacter::look);
 		EnhancedInputComponent->BindAction(jumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(pickupAction, ETriggerEvent::Triggered, this, &ATestCharacter::fKeyPressed);
+		EnhancedInputComponent->BindAction(pickupAction, ETriggerEvent::Started, this, &ATestCharacter::fKeyPressed);
 		EnhancedInputComponent->BindAction(attack, ETriggerEvent::Triggered, this, &ATestCharacter::attackFunction);
 
 		
